@@ -9,6 +9,7 @@ function toInt(str) {
 }
 
 class UserController extends Controller {
+  // GET /users
   async index() {
     const ctx = this.ctx;
     const query = { limit: toInt(ctx.query.limit), offset: toInt(ctx.query.offset) };
@@ -16,17 +17,19 @@ class UserController extends Controller {
     ctx.body = users;
   }
 
-  // 根据ID查询用户
+  // GET 	/users/:id
   async show() {
     const ctx = this.ctx;
-    const user = ctx.model.User.findByPk(toInt(ctx.params.id));
+    const user = await ctx.model.User.findByPk(toInt(ctx.params.id));
     if (!user) {
+      // ctx.throw(404, 'user not found');
       ctx.status = 404;
+      return;
     }
     ctx.body = user;
   }
 
-  // 新增用户
+  // POST /users
   async create() {
     const ctx = this.ctx;
     const { name, age } = ctx.request.body;
@@ -35,7 +38,7 @@ class UserController extends Controller {
     ctx.body = user;
   }
 
-  // 更新用户信息
+  // PUT /users/:id
   async update() {
     const ctx = this.ctx;
     const id = toInt(ctx.params.id);
@@ -49,11 +52,11 @@ class UserController extends Controller {
     ctx.body = user;
   }
 
-  // 删除用户
+  // DELETE /posts/:id
   async destroy() {
     const ctx = this.ctx;
     const id = toInt(ctx.params.id);
-    const user = ctx.model.User.findByPk(id);
+    const user = await ctx.model.User.findByPk(id);
     if (!user) {
       ctx.status = 404;
       return;

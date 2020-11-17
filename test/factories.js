@@ -7,7 +7,8 @@ module.exports = app => {
 
   // 定义 user 和默认数据
   factory.define('user', app.model.User, {
-    name: factory.sequence('User.name', n => `name_${n}`),
-    age: 18,
+    // name: factory.sequence('User.name', n => `name_${n}`),
+    name: factory.chance('name'),
+    age: factory.chance('integer', { min: 18, max: 30 }),
   });
 };
